@@ -1,21 +1,29 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addPost } from "@/reducers/post";
+import { addPostRequestAction } from "@/reducers/post";
+import useInput from "@/hooks/useInput";
 
 const PostForm = () => {
-  const imagePaths = useSelector((state) => state.post.imagePaths);
   const dispatch = useDispatch();
+  const { imagePaths, addPostLoading, addPostDone } = useSelector(
+    (state) => state.post
+  );
+  const [text, onChangeText, setText] = useInput("");
 
-  const [text, setText] = useState("");
-  const onChangeText = useCallback((e) => {
-    setText(e.target.value);
-  }, []);
+  const onSubmit = useCallback(
+    (e) => {
+      dispatch(addPostRequestAction(text));
+    },
+    [text]
+  );
 
-  const onSubmit = useCallback(() => {
-    dispatch(addPost);
-    setText("");
-  }, []);
+  // 포스팅이 완료되면 기존 입력창의 텍스트를 초기화하는 side Effect가 실행되도록 useEffect를 사용
+  useEffect(() => {
+    if (addPostDone) {
+      setText("");
+    }
+  }, [addPostDone]);
 
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
@@ -43,7 +51,12 @@ const PostForm = () => {
         />
         <Button onClick={onClickImageUpload}>이미지 추가하기</Button>
         {/* 게시글 작성버튼 */}
-        <Button type="primary" style={{ float: "right" }} htmlType="submit">
+        <Button
+          type="primary"
+          style={{ float: "right" }}
+          htmlType="submit"
+          loading={addPostLoading}
+        >
           Tweet
         </Button>
       </div>

@@ -6,7 +6,6 @@ import {
   HeartOutlined,
   MessageOutlined,
   RetweetOutlined,
-  HeartTwoTone,
   HeartFilled,
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
@@ -21,7 +20,6 @@ const PostCard = ({ post }) => {
   const [commentFormOpened, setcommentFormOpened] = useState(false);
 
   const onToggleLike = useCallback(() => {
-    console.log("liked!");
     setLiked((prev) => !prev);
   }, []);
 
@@ -32,7 +30,7 @@ const PostCard = ({ post }) => {
   const id = useSelector((state) => state.user.myInfo?.id);
 
   return (
-    <div style={{ marginBottom: "16px" }}>
+    <CardWrapper>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -54,7 +52,9 @@ const PostCard = ({ post }) => {
                 {id && post.User.id === id ? (
                   <>
                     <Button>수정</Button>
-                    <Button type="danger">삭제</Button>
+                    <Button type="primary" danger>
+                      삭제
+                    </Button>
                   </>
                 ) : (
                   <Button>신고</Button>
@@ -91,9 +91,13 @@ const PostCard = ({ post }) => {
           />
         </CommentWrapper>
       )}
-    </div>
+    </CardWrapper>
   );
 };
+
+const CardWrapper = styled.div`
+  margin-bottom: 20px;
+`;
 
 const CommentWrapper = styled.div`
   margin-top: 16px;

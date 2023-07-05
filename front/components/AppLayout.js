@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 const AppLayout = ({ children }) => {
   // const [isLoggedin, setIsLoggedIn] = useState(false);
 
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { myInfo } = useSelector((state) => state.user);
 
   return (
     <>
@@ -38,7 +38,7 @@ const AppLayout = ({ children }) => {
       </MenuBar>
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {myInfo ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

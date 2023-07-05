@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "psrserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": ["airbnb", "next/babel", "next/core-web-vitals"],
+  "plugins": ["import", "react-hooks"]
+  // "extends": ["next/babel", "next/core-web-vitals"]
+}

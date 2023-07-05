@@ -20,24 +20,30 @@ const LoginForm = () => {
   // }, []);
 
   const dispatch = useDispatch();
-  const { isLoggingIn } = useSelector((state) => state.user);
-  const [id, onChangeId] = useInput("");
+  const { logInLoading } = useSelector((state) => state.user);
+  const [email, onChangeEmail] = useInput("");
   const [pw, onChangePw] = useInput("");
 
   const onSubmitForm = useCallback(
     (e) => {
-      console.log(id, pw);
-      dispatch(logInRequestAction({ id, pw }));
+      // console.log(email, pw);
+      dispatch(logInRequestAction({ email, pw }));
     },
-    [id, pw]
+    [email, pw]
   );
 
   return (
     <Form onFinish={onSubmitForm}>
       <div>
-        <label htmlFor="user-id">아이디</label>
+        <label htmlFor="user-email">이메일</label>
         <br />
-        <Input name="user-id" value={id} onChange={onChangeId} required />
+        <Input
+          name="user-email"
+          value={email}
+          onChange={onChangeEmail}
+          required
+          type="email"
+        />
       </div>
       <div>
         <label htmlFor="user-pw">비밀번호</label>
@@ -54,7 +60,7 @@ const LoginForm = () => {
       이럴 땐 styled나 emotion 등의 스타일을 따로 적용하도록 한다. 
       물론 성능에 큰 영향을 주지 않는 컴포넌트라면 인라인 스타일을 사용하여도 무방하다. */}
       <ButtonWrapper>
-        <Button type="primary" htmlType="submit" loading={isLoggingIn}>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>
           로그인
         </Button>
         <Link href="/signup">
