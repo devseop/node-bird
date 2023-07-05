@@ -5,6 +5,5 @@ import userSaga from "./user";
 import postSaga from "./post";
 
 export default function* rootSaga() {
-  console.log("rootSaga");
   yield all([fork(userSaga), fork(postSaga)]);
 }
