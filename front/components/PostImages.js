@@ -26,7 +26,8 @@ const PostImages = ({ images }) => {
           onClick={onZoom}
           style={{
             borderRadius: "8px 8px 0 0",
-            width: "628px",
+            // faker 사용시 해당 옵션때문에 사이즈가 어긋남
+            // width: "628px",
             objectFit: "cover",
           }}
         />

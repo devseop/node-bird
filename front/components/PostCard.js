@@ -111,7 +111,7 @@ const PostCard = ({ post }) => {
 };
 
 const CardWrapper = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
 
 const CommentWrapper = styled.div`

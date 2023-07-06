@@ -1,5 +1,6 @@
 import shortId from "shortid";
 import { produce } from "immer";
+import { faker } from "@faker-js/faker";
 
 export const initialState = {
   mainPosts: [
@@ -57,6 +58,39 @@ export const initialState = {
   addCommentDone: false,
   addCommentError: null,
 };
+
+// faker를 이용한 더미데이터 생성
+faker.seed(123);
+
+initialState.mainPosts = initialState.mainPosts.concat(
+  Array(20)
+    .fill()
+    .map((v, i) => ({
+      id: shortId.generate(),
+      User: {
+        id: shortId.generate(),
+        nickname: faker.internet.userName(),
+      },
+      content: faker.lorem.paragraph(),
+      Images: [
+        {
+          src: faker.image.urlPicsumPhotos(),
+        },
+        {
+          src: faker.image.urlPicsumPhotos(),
+        },
+      ],
+      Comments: [
+        {
+          User: {
+            id: shortId.generate(),
+            nickname: faker.internet.userName(),
+          },
+          content: faker.lorem.sentence({ min: 2, max: 5 }),
+        },
+      ],
+    }))
+);
 
 export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
