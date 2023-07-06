@@ -1,4 +1,11 @@
-import { all, fork, delay, put, takeLatest } from "redux-saga/effects";
+import {
+  all,
+  fork,
+  delay,
+  put,
+  takeLatest,
+  throttle,
+} from "redux-saga/effects";
 import axios from "axios";
 import shortId from "shortid";
 import {
@@ -11,8 +18,33 @@ import {
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   REMOVE_POST_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  generateDummyPost,
 } from "@/reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "@/reducers/user";
+
+// load posts
+function loadPostsAPI(data) {
+  return axios.get("/api/post");
+}
+
+function* loadPostsSaga(action) {
+  try {
+    // const result = yield call(addPostAPI);
+    yield delay(1000);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: generateDummyPost(10),
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 // add post
 function addPostAPI(data) {
@@ -94,6 +126,10 @@ function* addCommentSaga(action) {
 // => 서버에서는 데이터가 두 번 저장될 수 있기 때문에 검사를 해줘야한다.
 // throttle은 설정한 시간(ms) 내에서만 한 번 실행되도록 한다.
 
+function* watchLoadPosts() {
+  yield takeLatest(LOAD_POSTS_REQUEST, loadPostsSaga);
+}
+
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
 }
@@ -107,5 +143,10 @@ function* watchAddComment() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchRemovePost), fork(watchAddComment)]);
+  yield all([
+    fork(watchAddPost),
+    fork(watchLoadPosts),
+    fork(watchRemovePost),
+    fork(watchAddComment),
+  ]);
 }

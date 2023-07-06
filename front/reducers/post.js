@@ -3,51 +3,13 @@ import { produce } from "immer";
 import { faker } from "@faker-js/faker";
 
 export const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: "devseop",
-      },
-      content: "첫번째 게시글 #해시태그 #노드",
-      Images: [
-        {
-          id: shortId.generate(),
-          src: "https://images.unsplash.com/photo-1682685794761-c8e7b2347702?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
-        },
-        {
-          id: shortId.generate(),
-          src: "https://images.unsplash.com/photo-1687800132770-8f1600a5849e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDN8Ym84alFLVGFFMFl8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
-        },
-        {
-          id: shortId.generate(),
-          src: "https://images.unsplash.com/photo-1687704840383-959f27cf03c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDR8Ym84alFLVGFFMFl8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
-        },
-      ],
-      Comments: [
-        {
-          id: shortId.generate(),
-          User: {
-            id: shortId.generate(),
-            nickname: "댕이",
-          },
-          content: "멍멍",
-        },
-        {
-          id: shortId.generate(),
-          User: {
-            id: shortId.generate(),
-            nickname: "혜원",
-          },
-          content: "누워있는 중",
-        },
-      ],
-    },
-  ],
+  mainPosts: [],
   // 이미지 업로드 할 때 이미지 경로를 저장할 곳
   imagePaths: [],
-  // 게시글 추가가 완료되었을 때를 확인하기 위한 상태
+  hasMorePosts: true,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -62,10 +24,10 @@ export const initialState = {
 // faker를 이용한 더미데이터 생성
 faker.seed(123);
 
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20)
+export const generateDummyPost = (number) =>
+  Array(number)
     .fill()
-    .map((v, i) => ({
+    .map(() => ({
       id: shortId.generate(),
       User: {
         id: shortId.generate(),
@@ -73,9 +35,6 @@ initialState.mainPosts = initialState.mainPosts.concat(
       },
       content: faker.lorem.paragraph(),
       Images: [
-        {
-          src: faker.image.urlPicsumPhotos(),
-        },
         {
           src: faker.image.urlPicsumPhotos(),
         },
@@ -89,8 +48,13 @@ initialState.mainPosts = initialState.mainPosts.concat(
           content: faker.lorem.sentence({ min: 2, max: 5 }),
         },
       ],
-    }))
-);
+    }));
+
+// initialState.mainPosts = initialState.mainPosts.concat();
+
+export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
+export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
+export const LOAD_POSTS_FAILURE = "LOAD_POSTS_FAILURE";
 
 export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
@@ -137,6 +101,23 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POSTS_REQUEST:
+        // console.log("LOAD_POSTS_REQUEST");
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        // console.log("LOAD_POSTS_SUCCESS");
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePosts = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;

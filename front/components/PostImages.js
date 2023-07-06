@@ -25,7 +25,7 @@ const PostImages = ({ images }) => {
           alt={images[0].src}
           onClick={onZoom}
           style={{
-            borderRadius: "8px 8px 0 0",
+            borderRadius: 0,
             // faker 사용시 해당 옵션때문에 사이즈가 어긋남
             // width: "628px",
             objectFit: "cover",
@@ -46,7 +46,7 @@ const PostImages = ({ images }) => {
             alt={images[0].src}
             onClick={onZoom}
             style={{
-              borderRadius: "8px 0 0 0",
+              borderRadius: 0,
               width: "50%",
               cursor: "pointer",
             }}
@@ -58,7 +58,6 @@ const PostImages = ({ images }) => {
             alt={images[1].src}
             onClick={onZoom}
             style={{
-              borderRadius: "0 8px 0 0",
               width: "50%",
               cursor: "pointer",
             }}
@@ -78,7 +77,10 @@ const PostImages = ({ images }) => {
           src={images[0].src}
           alt={images[0].src}
           onClick={onZoom}
-          style={{ borderRadius: "8px 0 0 0", cursor: "pointer" }}
+          style={{
+            borderRadius: 0,
+            cursor: "pointer",
+          }}
         />
         <div
           style={{

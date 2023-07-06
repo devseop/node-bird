@@ -9,10 +9,10 @@ import {
   HeartFilled,
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
-
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
+import FollowButton from "./FollowButton";
 import styled from "styled-components";
 import { REMOVE_POST_REQUEST } from "@/reducers/post";
 
@@ -42,7 +42,8 @@ const PostCard = ({ post }) => {
   return (
     <CardWrapper>
       <Card
-        cover={post.Images[0] && <PostImages images={post.Images} />}
+        title={post.User.nickname}
+        cover={post.Images[0].src && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
           liked ? (
@@ -80,10 +81,11 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
+          // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+          // title={post.User.nickname}
           description={<PostCardContent postData={post.content} />}
         />
       </Card>

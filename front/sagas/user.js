@@ -10,7 +10,55 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_REQUEST,
   SIGN_UP_FAILURE,
+  FOLLOW_REQUEST,
+  UNFOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
+  FOLLOW_FAILURE,
+  UNFOLLOW_SUCCESS,
+  UNFOLLOW_FAILURE,
 } from "@/reducers/user";
+
+// follow
+function followAPI() {
+  return axios.post("/api/follow");
+}
+
+function* followSaga(action) {
+  try {
+    yield delay(1000);
+    // const result = yield call(followAPI);
+    yield put({
+      type: FOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: FOLLOW_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// unfollow
+function unfollowAPI() {
+  return axios.post("/api/unfollow");
+}
+
+function* unfollowSaga(action) {
+  try {
+    yield delay(1000);
+    // const result = yield call(unfollowAPI);
+    yield put({
+      type: UNFOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: UNFOLLOW_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 // log in
 function logInAPI() {
@@ -75,11 +123,19 @@ function* signUpSaga() {
 }
 
 // 이벤트 리스너와 같은 역할을 하는 함수
+// yield take(...)의 치명적인 단점은 일회용이라는 것.
+// 한 번 실행하고 난 뒤에는 해당 함수까지 사라진다.
+// while(true)로 감싸서 해결할 수 있지만 직관적인 방법은 아니다.
+// 이럴 때는 takeEvery를 이용한다. takeEvery는 마지막에 호출한 것만 실행되도록 한다.
+function* watchFollow() {
+  yield takeLatest(FOLLOW_REQUEST, followSaga);
+}
+
+function* watchUnfollow() {
+  yield takeLatest(UNFOLLOW_REQUEST, unfollowSaga);
+}
+
 function* watchLogIn() {
-  // yield take(...)의 치명적인 단점은 일회용이라는 것.
-  // 한 번 실행하고 난 뒤에는 해당 함수까지 사라진다.
-  // while(true)로 감싸서 해결할 수 있지만 직관적인 방법은 아니다.
-  // 이럴 때는 takeEvery를 이용한다. takeEvery는 마지막에 호출한 것만 실행되도록 한다.
   yield takeLatest(LOG_IN_REQUEST, logInSaga);
 }
 
@@ -92,5 +148,11 @@ function* watchSignUp() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp)]);
+  yield all([
+    fork(watchFollow),
+    fork(watchUnfollow),
+    fork(watchLogIn),
+    fork(watchLogOut),
+    fork(watchSignUp),
+  ]);
 }
