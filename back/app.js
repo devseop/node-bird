@@ -1,14 +1,14 @@
 const express = require("express");
 const postRouter = require("./routes/post");
+const db = require("./models");
 const app = express();
 
-//* app.get => 가져오기
-//* app.post => 생성하기
-//* app.put => 전체 수정
-//* app.delete => 삭제
-//* app.patch => 부분 수정
-//* app.options => 찔러보기(요청 확인)
-//* app.head => 헤더만 가져오기
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log("✅ DataBase Connected!");
+  })
+  .catch(console.error);
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello, Express!</h1>");
@@ -29,5 +29,13 @@ app.get("/post", (req, res) => {
 app.use("/post", postRouter);
 
 app.listen(3065, () => {
-  console.log("🚧 Server is running 🚧");
+  console.log("🚧 Server is running! 🚧");
 });
+
+//* app.get => 가져오기
+//* app.post => 생성하기
+//* app.put => 전체 수정
+//* app.delete => 삭제
+//* app.patch => 부분 수정
+//* app.options => 찔러보기(요청 확인)
+//* app.head => 헤더만 가져오기

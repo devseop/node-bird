@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Post.associate = (db) => {
     db.Post.belongsTo(db.User); // 어떤 사용자가 포스트를 작성했는가에 대한 관계
-    db.Post.belongsToMany(db.Hashtag); // 다대다(M:N) 관계를 표현
+    db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" }); // 다대다(M:N) 관계를 표현
     db.Post.hasMany(db.Comment);
     db.Post.hasMany(db.Image);
     db.Post.belongsToMany(db.User, { through: "Like", as: "Likers" }); // 어떤 사용자가 포스트에 좋아요를 눌렀는가에 대한 관계
