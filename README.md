@@ -5,7 +5,7 @@
 ## 사용한 기술
 
 - `Front-End`: React / Next.js / Emotion / Styled-Component / Redux / Redux-Saga
-- `Back-End`: Node.js / Express / AWS
+- `Back-End`: Node.js / Express / MySQL / AWS
 
 ## 구현 기능
 
