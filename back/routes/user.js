@@ -13,18 +13,10 @@ router.post("/", async (req, res, next) => {
       },
     });
     if (exUser) {
-      return res.status(403).send("❌ 이미 사용 중인 이메일입니다.");
+      return res
+        .status(403)
+        .send("이미 사용 중인 이메일입니다. 다른 이메일을 입력해주세요.");
     }
-
-    // 중복 닉네임 찾기
-    // const exNickname = await User.findOne({
-    //   where: {
-    //     nickname: req.body.nickname,
-    //   },
-    // });
-    // if (exNickname) {
-    //   return res.status(403).send("❌ 이미 사용 중인 닉네임입니다.");
-    // }
 
     // 비밀번호 해쉬화
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -34,8 +26,8 @@ router.post("/", async (req, res, next) => {
       nickname: req.body.nickname,
       password: hashedPassword,
     });
-
-    res.status(200).send("✅ OK");
+    // res.setHeader("Access-Control-Allow-Origin", "http://localhos:3000"); // 두번쨰에 '*'를 넣으면 모든 서버에서 허용
+    res.status(201).send("✅ OK");
   } catch (error) {
     console.error(error);
     next(error); // status 500

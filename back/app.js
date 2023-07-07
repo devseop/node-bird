@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
 const db = require("./models");
@@ -11,6 +13,12 @@ db.sequelize
   })
   .catch(console.error);
 
+app.use(
+  cors({
+    origin: true, // origin: true로 설정시 요청을 보낸 곳의 주소가 자동으로 삽입됨
+    // credentials: false,
+  })
+); // cors 라이브러리를 이용하면 모든 요청에 Access-Control-Allow-Origin를 넣어줌
 app.use(express.json()); // json 형식의 데이터를 req.body에 넣어주는 역할
 app.use(express.urlencoded({ extended: true })); // form data를 req.body에 넣어주는 역할
 
