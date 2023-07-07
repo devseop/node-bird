@@ -1,5 +1,6 @@
 const express = require("express");
 const postRouter = require("./routes/post");
+const userRouter = require("./routes/user");
 const db = require("./models");
 const app = express();
 
@@ -9,6 +10,9 @@ db.sequelize
     console.log("✅ DataBase Connected!");
   })
   .catch(console.error);
+
+app.use(express.json()); // json 형식의 데이터를 req.body에 넣어주는 역할
+app.use(express.urlencoded({ extended: true })); // form data를 req.body에 넣어주는 역할
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello, Express!</h1>");
@@ -27,6 +31,7 @@ app.get("/post", (req, res) => {
 });
 
 app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 app.listen(3065, () => {
   console.log("🚧 Server is running! 🚧");

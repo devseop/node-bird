@@ -18,16 +18,16 @@ const SignUp = () => {
 
   const [email, onChangeEmail] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
-  const [pw, onChangePw] = useInput("");
+  const [password, onChangePassword] = useInput("");
 
-  const [pwCheck, setPwCheck] = useState("");
-  const [pwError, setPwError] = useState(false);
-  const onChangePwCheck = useCallback(
+  const [passwordCheck, setPasswordCheck] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const onChangePasswordCheck = useCallback(
     (e) => {
-      setPwCheck(e.target.value);
-      setPwError(e.target.value !== pw);
+      setPasswordCheck(e.target.value);
+      setPasswordError(e.target.value !== password);
     },
-    [pw]
+    [password]
   );
 
   const [term, setTerm] = useState("");
@@ -38,19 +38,19 @@ const SignUp = () => {
   });
 
   const onSubmit = useCallback(() => {
-    if (pw !== pwCheck) {
-      return setPwError(true);
+    if (password !== passwordCheck) {
+      return setPasswordError(true);
     }
 
     if (!term) {
       return setTermError(true);
     }
-    console.log({ email: email, nickname: nickname, pw: pw });
+    console.log({ email: email, nickname: nickname, password: password });
     dispatch({
       type: SIGN_UP_REQUEST,
-      data: { email, pw, nickname },
+      data: { email, password, nickname },
     });
-  }, [email, pw, pwCheck, term]);
+  }, [email, password, passwordCheck, term]);
 
   return (
     <AppLayout>
@@ -80,27 +80,27 @@ const SignUp = () => {
           />
         </div>
         <div>
-          <label htmlFor="user-pw">비밀번호</label>
+          <label htmlFor="user-password">비밀번호</label>
           <br />
           <Input
-            name="user-pw"
+            name="user-password"
             type="password"
-            value={pw}
-            onChange={onChangePw}
+            value={password}
+            onChange={onChangePassword}
             required
           />
         </div>
         <div>
-          <label htmlFor="user-pw-check">비밀번호 확인</label>
+          <label htmlFor="user-password-check">비밀번호 확인</label>
           <br />
           <Input
-            name="user-pw-check"
+            name="user-password-check"
             type="password"
-            value={pwCheck}
-            onChange={onChangePwCheck}
+            value={passwordCheck}
+            onChange={onChangePasswordCheck}
             required
           />
-          {pwError && (
+          {passwordError && (
             <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
           )}
         </div>
