@@ -70,7 +70,6 @@ const dummyUser = (data) => ({
 });
 
 export const logInRequestAction = (data) => {
-  // console.log("reducer", data);
   return {
     type: LOG_IN_REQUEST,
     data,

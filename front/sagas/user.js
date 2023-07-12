@@ -68,7 +68,6 @@ function logInAPI(data) {
 function* logInSaga(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    console.log("saga", result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
