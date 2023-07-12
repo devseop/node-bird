@@ -17,9 +17,16 @@ const ErrorMessage = styled.div`
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError } = useSelector(
+  const { signUpLoading, signUpDone, signUpError, myInfo } = useSelector(
     (state) => state.user
   );
+
+  // 회원가입 화면에서 로그인시 메인 화면으로 이동
+  useEffect(() => {
+    if (!(myInfo && myInfo.id)) {
+      Router.replace("/");
+    }
+  }, [myInfo && myInfo.id]);
 
   // 회원가입 성공시
   useEffect(() => {

@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
-const { User } = require("../models");
+const { User, Post } = require("../models");
 
 const router = express.Router();
 
@@ -24,7 +24,27 @@ router.post(
           console.error(logInErr);
           return next(logInErr);
         }
-        return res.status(200).json(user);
+        const fullUserWithoutPassword = await User.findOne({
+          where: { id: user.id },
+          // 원하는 데이터를 아래와 같이 선택하여 보내준다.
+          // attributes: ["id", "nickname", "email"],
+          // exclude는 해당 데이터를 제외한 모든 데이터를 보내준다.
+          attributes: { exclude: ["password"] },
+          include: [
+            {
+              model: Post,
+            },
+            {
+              model: User,
+              as: "Followings",
+            },
+            {
+              model: User,
+              as: "Followers",
+            },
+          ],
+        });
+        return res.status(200).json(fullUserWithoutPassword);
       });
     })(req, res, next);
   }
