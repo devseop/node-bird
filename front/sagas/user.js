@@ -62,17 +62,15 @@ function* unfollowSaga(action) {
 
 // log in
 function logInAPI() {
-  return axios.post("/api/logIn");
+  return axios.post("/user/logIn");
 }
 
 function* logInSaga(action) {
   try {
-    // console.log("saga logIn");
-    yield delay(1000);
-    // const result = yield call(logInAPI);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -84,7 +82,7 @@ function* logInSaga(action) {
 
 // log out
 function logOutAPI() {
-  return axios.post("/api/logOut");
+  return axios.post("/user/logOut");
 }
 
 function* logOutSaga() {
@@ -104,7 +102,7 @@ function* logOutSaga() {
 
 // sign up
 function signUpAPI(data) {
-  return axios.post("http://localhost:3065/user", data);
+  return axios.post("/user", data);
 }
 
 function* signUpSaga(action) {
