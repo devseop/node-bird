@@ -61,13 +61,14 @@ function* unfollowSaga(action) {
 }
 
 // log in
-function logInAPI() {
-  return axios.post("/user/logIn");
+function logInAPI(data) {
+  return axios.post("/user/logIn", data);
 }
 
 function* logInSaga(action) {
   try {
     const result = yield call(logInAPI, action.data);
+    console.log("saga", result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,

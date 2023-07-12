@@ -9,7 +9,7 @@ import { logInRequestAction } from "@/reducers/user";
 
 const LoginForm = () => {
   // const [id, setId] = useState("");
-  // const [pw, setPw] = useState("");
+  // const [password, setPw] = useState("");
 
   // const onChangeId = useCallback((e) => {
   //   setId(e.target.value);
@@ -22,14 +22,14 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const { logInLoading } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput("");
-  const [pw, onChangePw] = useInput("");
+  const [password, onChangePw] = useInput("");
 
   const onSubmitForm = useCallback(
     (e) => {
-      // console.log(email, pw);
-      dispatch(logInRequestAction({ email, pw }));
+      // console.log(email, password);
+      dispatch(logInRequestAction({ email, password }));
     },
-    [email, pw]
+    [email, password]
   );
 
   return (
@@ -46,12 +46,12 @@ const LoginForm = () => {
         />
       </div>
       <div>
-        <label htmlFor="user-pw">비밀번호</label>
+        <label htmlFor="user-password">비밀번호</label>
         <br />
         <Input
-          name="user-pw"
+          name="user-password"
           type="password"
-          value={pw}
+          value={password}
           onChange={onChangePw}
           required
         />

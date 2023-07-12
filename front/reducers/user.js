@@ -70,6 +70,7 @@ const dummyUser = (data) => ({
 });
 
 export const logInRequestAction = (data) => {
+  // console.log("reducer", data);
   return {
     type: LOG_IN_REQUEST,
     data,
@@ -138,7 +139,7 @@ const reducer = (state = initialState, action) =>
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.myInfo = dummyUser(action.data);
+        draft.myInfo = action.data;
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;

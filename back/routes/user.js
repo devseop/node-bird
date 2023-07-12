@@ -16,6 +16,7 @@ router.post(
       }
       if (info) {
         // 401 = 허가되지 않음
+        console.log(info);
         return res.status(401).send(info.reason);
       }
       return req.logIn(user, async (logInErr) => {
@@ -23,7 +24,7 @@ router.post(
           console.error(logInErr);
           return next(logInErr);
         }
-        return res.json(user);
+        return res.status(200).json(user);
       });
     })(req, res, next);
   }
@@ -58,6 +59,13 @@ router.post("/", async (req, res, next) => {
     console.error(error);
     next(error); // status 500
   }
+});
+
+router.post("/user/logOut", (req, res) => {
+  console.log(req.user);
+  req.logOut();
+  req.session.destroy();
+  res.send("✅ Log Out Successed");
 });
 
 module.exports = router;

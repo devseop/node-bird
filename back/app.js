@@ -1,10 +1,16 @@
 const express = require("express");
 const cors = require("cors");
+const passport = require("passport");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
 
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
 const db = require("./models");
 const passportConfig = require("./passport");
+
+dotenv.config();
 
 const app = express();
 
@@ -25,6 +31,16 @@ app.use(
 ); // cors 라이브러리를 이용하면 모든 요청에 Access-Control-Allow-Origin를 넣어줌
 app.use(express.json()); // json 형식의 데이터를 req.body에 넣어주는 역할
 app.use(express.urlencoded({ extended: true })); // form data를 req.body에 넣어주는 역할
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello, Express!</h1>");
