@@ -73,7 +73,7 @@ function* addPostSaga(action) {
 
 // remove post
 function removePostAPI(data) {
-  return axios.post("/api/post");
+  return axios.post("/api/post", data);
 }
 
 function* removePostSaga(action) {

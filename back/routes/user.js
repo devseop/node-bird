@@ -85,7 +85,8 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
       nickname: req.body.nickname,
       password: hashedPassword,
     });
-    // res.setHeader("Access-Control-Allow-Origin", "http://localhos:3000"); // 두번쨰에 '*'를 넣으면 모든 서버에서 허용
+    // res.setHeader("Access-Control-Allow-Origin", "http://localhos:3000");
+    // 두번쨰에 '*'를 넣으면 모든 서버에서 허용
     res.status(201).send("✅ OK");
   } catch (error) {
     console.error(error);

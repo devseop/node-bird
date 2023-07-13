@@ -43,7 +43,7 @@ const PostCard = ({ post }) => {
     <CardWrapper>
       <Card
         title={post.User.nickname}
-        cover={post.Images[0].src && <PostImages images={post.Images} />}
+        cover={post.Images[0]?.src ? <PostImages images={post.Images} /> : null}
         actions={[
           <RetweetOutlined key="retweet" />,
           liked ? (
@@ -81,7 +81,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        extra={id && <FollowButton post={post} />}
+        extra={id && post.User.id === id ? null : <FollowButton post={post} />}
       >
         <Card.Meta
           // avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
