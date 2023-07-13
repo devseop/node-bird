@@ -6,6 +6,41 @@ const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
+// 새로고침시 사용자 정보를 복구하는 코드
+router.get("/", async (req, res, next) => {
+  try {
+    // 사용자가 있으면 정보를 보내고 없으면 아무것도 보내지 않기
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: { exclude: ["password"] },
+        include: [
+          {
+            model: Post,
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followings",
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followers",
+            attributes: ["id"],
+          },
+        ],
+      });
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.post(
   "/logIn",
   isNotLoggedIn,
@@ -35,14 +70,17 @@ router.post(
           include: [
             {
               model: Post,
+              attributes: ["id"],
             },
             {
               model: User,
               as: "Followings",
+              attributes: ["id"],
             },
             {
               model: User,
               as: "Followers",
+              attributes: ["id"],
             },
           ],
         });
@@ -56,9 +94,9 @@ router.post(
 router.post("/logOut", isLoggedIn, (req, res) => {
   console.log(req.user);
   req.logOut(() => {
-    res.redirect("/");
+    // res.redirect("/");
   });
-  req.session.destroy();
+  // req.session.destroy();
   res.send("✅ Log Out Successed");
 });
 
