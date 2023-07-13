@@ -2,11 +2,13 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { User, Post } = require("../models");
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
 router.post(
   "/logIn",
+  isNotLoggedIn,
   // 미들웨어를 확장하는 방법
   (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
@@ -50,8 +52,18 @@ router.post(
   }
 );
 
-// POST /user/
-router.post("/", async (req, res, next) => {
+// log out
+router.post("/logOut", isLoggedIn, (req, res) => {
+  console.log(req.user);
+  req.logOut(() => {
+    res.redirect("/");
+  });
+  req.session.destroy();
+  res.send("✅ Log Out Successed");
+});
+
+// sign up
+router.post("/", isNotLoggedIn, async (req, res, next) => {
   try {
     // 중복 이메일 찾기
     const exUser = await User.findOne({
@@ -79,13 +91,6 @@ router.post("/", async (req, res, next) => {
     console.error(error);
     next(error); // status 500
   }
-});
-
-router.post("/user/logOut", (req, res) => {
-  console.log(req.user);
-  req.logOut();
-  req.session.destroy();
-  res.send("✅ Log Out Successed");
 });
 
 module.exports = router;

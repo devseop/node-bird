@@ -46,10 +46,6 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello, Express!</h1>");
 });
 
-app.get("/api", (req, res) => {
-  res.send("<h1>Hello, API!</h1>");
-});
-
 app.get("/post", (req, res) => {
   res.json([
     { id: 1, content: "hello" },
@@ -60,6 +56,9 @@ app.get("/post", (req, res) => {
 
 app.use("/post", postRouter);
 app.use("/user", userRouter);
+
+// 에러 처리를 위한 미들웨어는 4개의 매개변수를 가진다.
+// app.use((err, req, res, next) => {});
 
 app.listen(3065, () => {
   console.log("🚧 Server is running! 🚧");
