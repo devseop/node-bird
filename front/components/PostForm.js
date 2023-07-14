@@ -1,7 +1,10 @@
 import React, { useCallback, useRef, useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addPostRequestAction } from "@/reducers/post";
+import {
+  addPostRequestAction,
+  uploadImagesRequestAction,
+} from "@/reducers/post";
 import useInput from "@/hooks/useInput";
 
 const PostForm = () => {
@@ -30,6 +33,15 @@ const PostForm = () => {
     imageInput.current.click();
   }, [imageInput.current]);
 
+  const onChangeImages = useCallback((e) => {
+    console.log("images", e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append("image", f);
+    });
+    dispatch(uploadImagesRequestAction(imageFormData));
+  });
+
   return (
     <Form
       style={{ margin: "12px 0 24px" }}
@@ -48,6 +60,7 @@ const PostForm = () => {
           multiple
           style={{ display: "none" }}
           ref={imageInput}
+          onChange={onChangeImages}
         />
         <Button onClick={onClickImageUpload}>이미지 추가하기</Button>
         {/* 게시글 작성버튼 */}
