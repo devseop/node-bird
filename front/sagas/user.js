@@ -19,7 +19,30 @@ import {
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
   LOAD_MY_INFO_FAILURE,
+  CHANGE_NICKNAME_REQUEST,
+  CHANGE_NICKNAME_SUCCESS,
+  CHANGE_NICKNAME_FAILURE,
 } from "@/reducers/user";
+
+// change nickname
+function changeNicknameAPI(data) {
+  return axios.patch(`/user/nickname`, { nickname: data });
+}
+
+function* changeNicknameSaga(action) {
+  try {
+    const result = yield call(changeNicknameAPI, action.data);
+    yield put({
+      type: CHANGE_NICKNAME_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: CHANGE_NICKNAME_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 // load my info
 function loadMyInfoAPI() {
@@ -147,6 +170,10 @@ function* signUpSaga(action) {
 // 한 번 실행하고 난 뒤에는 해당 함수까지 사라진다.
 // while(true)로 감싸서 해결할 수 있지만 직관적인 방법은 아니다.
 // 이럴 때는 takeEvery를 이용한다. takeEvery는 마지막에 호출한 것만 실행되도록 한다.
+function* watchChangeNickname() {
+  yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNicknameSaga);
+}
+
 function* watchLoadMyInfo() {
   yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfoSaga);
 }
@@ -173,6 +200,7 @@ function* watchSignUp() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchChangeNickname),
     fork(watchLoadMyInfo),
     fork(watchFollow),
     fork(watchUnfollow),

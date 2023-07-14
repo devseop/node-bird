@@ -59,23 +59,6 @@ export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
 export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
 
-const dummyUser = (data) => ({
-  ...data,
-  nickname: "devseop",
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [
-    { nickname: "lee" },
-    { nickname: "devdev" },
-    { nickname: "spzycozy" },
-  ],
-  Followers: [
-    { nickname: "lee" },
-    { nickname: "devdev" },
-    { nickname: "spzycozy" },
-  ],
-});
-
 export const logInRequestAction = (data) => {
   return {
     type: LOG_IN_REQUEST,
@@ -200,6 +183,7 @@ const reducer = (state = initialState, action) =>
       case CHANGE_NICKNAME_SUCCESS:
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
+        draft.myInfo.nickname = action.data.nickname;
         break;
       case CHANGE_NICKNAME_FAILURE:
         draft.changeNicknameLoading = false;

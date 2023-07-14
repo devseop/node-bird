@@ -4,7 +4,7 @@ import Head from "next/head";
 import NicknameEditForm from "@/components/NicknameEditForm";
 import FollowList from "@/components/FollowList";
 import { useEffect } from "react";
-// import Router from "next/router";
+import Router from "next/router";
 
 const Profile = () => {
   const { myInfo } = useSelector((state) => state.user);
@@ -12,7 +12,7 @@ const Profile = () => {
   useEffect(() => {
     if (!(myInfo && myInfo.id)) {
       alert("로그인 후 이용해주세요.");
-      // Router.push("/");
+      Router.push("/");
     }
   }, [myInfo && myInfo.id]);
 
