@@ -4,8 +4,9 @@ const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
-
+const morgan = require("morgan");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const db = require("./models");
 const passportConfig = require("./passport");
@@ -23,6 +24,7 @@ db.sequelize
 
 passportConfig();
 
+app.use(morgan("dev"));
 app.use(
   cors({
     origin: true, // origin: true로 설정시 요청을 보낸 곳의 주소가 자동으로 삽입됨
@@ -46,15 +48,8 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello, Express!</h1>");
 });
 
-app.get("/post", (req, res) => {
-  res.json([
-    { id: 1, content: "hello" },
-    { id: 2, content: "hello3" },
-    { id: 2, content: "hello3" },
-  ]);
-});
-
 app.use("/post", postRouter);
+app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 
 // 에러 처리를 위한 미들웨어는 4개의 매개변수를 가진다.

@@ -1,6 +1,6 @@
-import shortId from "shortid";
 import { produce } from "immer";
-import { faker } from "@faker-js/faker";
+// import shortId from "shortid";
+// import { faker } from "@faker-js/faker";
 
 export const initialState = {
   mainPosts: [],
@@ -22,33 +22,32 @@ export const initialState = {
 };
 
 // faker를 이용한 더미데이터 생성
-faker.seed(123);
-
-export const generateDummyPost = (number) =>
-  Array(number)
-    .fill()
-    .map(() => ({
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: faker.internet.userName(),
-      },
-      content: faker.lorem.paragraph(),
-      Images: [
-        {
-          src: faker.image.urlPicsumPhotos(),
-        },
-      ],
-      Comments: [
-        {
-          User: {
-            id: shortId.generate(),
-            nickname: faker.internet.userName(),
-          },
-          content: faker.lorem.sentence({ min: 2, max: 5 }),
-        },
-      ],
-    }));
+// faker.seed(123);
+// export const generateDummyPost = (number) =>
+//   Array(number)
+//     .fill()
+//     .map(() => ({
+//       id: shortId.generate(),
+//       User: {
+//         id: shortId.generate(),
+//         nickname: faker.internet.userName(),
+//       },
+//       content: faker.lorem.paragraph(),
+//       Images: [
+//         {
+//           src: faker.image.urlPicsumPhotos(),
+//         },
+//       ],
+//       Comments: [
+//         {
+//           User: {
+//             id: shortId.generate(),
+//             nickname: faker.internet.userName(),
+//           },
+//           content: faker.lorem.sentence({ min: 2, max: 5 }),
+//         },
+//       ],
+//     }));
 
 // initialState.mainPosts = initialState.mainPosts.concat();
 
@@ -112,7 +111,8 @@ const reducer = (state = initialState, action) =>
         // console.log("LOAD_POSTS_SUCCESS");
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
-        draft.mainPosts = draft.mainPosts.concat(action.data);
+        // draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.mainPosts = action.data.concat(draft.mainPosts);
         draft.hasMorePosts = draft.mainPosts.length < 50;
         break;
       case LOAD_POSTS_FAILURE:
