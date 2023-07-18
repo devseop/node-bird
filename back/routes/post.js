@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { Post, Comment, Image, User } = require("../models");
+const { Post, Comment, Image, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -34,10 +34,23 @@ const upload = multer({
 // add post
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({
+            where: { name: tag.slice(1).toLowerCase() },
+          })
+        )
+      );
+      // result의 값이 [[노드, true], [리액트, true]] 형태로 출력
+      // 따라서 아래와 같이 value의 첫번째 값만 가져오도록 함
+      await post.addHashtags(result.map((v) => v[0]));
+    }
     // 이미지를 여러개 올리면 [1.png, 2.png]의 배열형태로 업로드됨
     // 이미지가 한개인 경우 image: 1.png의 결로 형태로 업로드됨
     // 따라서 위 경우를 나누기 위해 if 함수를 이용한 분기처리가 필요하다
