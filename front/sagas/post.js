@@ -69,13 +69,13 @@ function* uploadImagesSaga(action) {
 }
 
 // load posts
-function loadPostsAPI(data) {
-  return axios.get("/posts", data);
+function loadPostsAPI(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 
 function* loadPostsSaga(action) {
   try {
-    const result = yield call(loadPostsAPI, action.data);
+    const result = yield call(loadPostsAPI, action.lastId);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,

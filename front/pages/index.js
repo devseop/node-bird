@@ -37,11 +37,11 @@ const Home = () => {
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
       ) {
-        // console.log("⚙️ hasMorePosts");
         if (hasMorePosts && !loadPostsLoading) {
-          // console.log("✅ dispatch: onScroll");
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POSTS_REQUEST,
+            lastId,
           });
         }
       }
@@ -51,7 +51,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [hasMorePosts, loadPostsLoading]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
   // console.log("mainPosts", mainPosts);
   return (
