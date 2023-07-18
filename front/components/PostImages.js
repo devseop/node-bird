@@ -21,7 +21,7 @@ const PostImages = ({ images }) => {
         {/* 이미지를 클릭할 필요가 없다는 것을 알려주려면 role='presentation'을 추가한다. */}
         <img
           role="presentation"
-          src={images[0].src}
+          src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
           style={{
@@ -42,7 +42,7 @@ const PostImages = ({ images }) => {
         <div style={{ display: "flex" }}>
           <img
             role="presentation"
-            src={images[0].src}
+            src={`http://localhost:3065/${images[0].src}`}
             alt={images[0].src}
             onClick={onZoom}
             style={{
@@ -54,10 +54,11 @@ const PostImages = ({ images }) => {
           <img
             role="presentation"
             width="50%"
-            src={images[1].src}
+            src={`http://localhost:3065/${images[1].src}`}
             alt={images[1].src}
             onClick={onZoom}
             style={{
+              borderRadius: 0,
               width: "50%",
               cursor: "pointer",
             }}
@@ -74,7 +75,7 @@ const PostImages = ({ images }) => {
         <img
           role="presentation"
           width="50%"
-          src={images[0].src}
+          src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
           style={{

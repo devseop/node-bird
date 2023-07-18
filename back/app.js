@@ -5,6 +5,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
@@ -31,6 +32,9 @@ app.use(
     credentials: true,
   })
 ); // cors 라이브러리를 이용하면 모든 요청에 Access-Control-Allow-Origin를 넣어줌
+app.use("/", express.static(path.join(__dirname, "uploads")));
+// OS마다 경로구분자가 다르기 때문에 path.join()을 이용해서 자동으로 설정되게끔 한다
+
 app.use(express.json()); // json 형식의 데이터를 req.body에 넣어주는 역할
 app.use(express.urlencoded({ extended: true })); // form data를 req.body에 넣어주는 역할
 app.use(cookieParser(process.env.COOKIE_SECRET));

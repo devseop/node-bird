@@ -14,15 +14,49 @@ try {
   fs.mkdirSync("uploads");
 }
 
+// upload image
+const upload = multer({
+  storage: multer.diskStorage({
+    // 저장위치
+    destination(req, file, done) {
+      done(null, "uploads");
+    },
+    filename(req, file, done) {
+      // ex) 윤섭.png
+      const ext = path.extname(file.originalname); // 확장자 추출(.png)
+      const basename = path.basename(file.originalname, ext); // 윤섭
+      done(null, basename + "_" + new Date().getTime() + ext); // 윤섭1284759.png
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB 한도
+});
+
 // add post
-router.post("/", isLoggedIn, async (req, res, next) => {
+router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    // 이미지를 여러개 올리면 [1.png, 2.png]의 배열형태로 업로드됨
+    // 이미지가 한개인 경우 image: 1.png의 결로 형태로 업로드됨
+    // 따라서 위 경우를 나누기 위해 if 함수를 이용한 분기처리가 필요하다
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        // map()을 이용해 시퀄라이즈 생성을 해줌
+        // create()는 promise => 아래 코드는 promise의 배열인셈
+        // 따라서 Promise.all로 한번에 처리될 수 있도록 함
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images);
+      } else {
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
     const fullPost = await Post.findOne({
-      where: { id: post.id },
+      where: { id: parseInt(post.id) },
       include: [
         { model: Image },
         {
@@ -50,23 +84,6 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     console.error(error);
     next(error);
   }
-});
-
-// upload image
-const upload = multer({
-  storage: multer.diskStorage({
-    // 저장위치
-    destination(req, file, done) {
-      done(null, "uploads");
-    },
-    filename(req, file, done) {
-      // ex) 윤섭.png
-      const ext = path.extname(file.originalname); // 확장자 추출(.png)
-      const basename = path.basename(file.originalname, ext); // 윤섭
-      done(null, basename + new Date().getTime() + ext); // 윤섭1284759.png
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB 한도
 });
 
 router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {

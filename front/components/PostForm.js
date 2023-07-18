@@ -2,7 +2,8 @@ import React, { useCallback, useRef, useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addPostRequestAction,
+  ADD_POST_REQUEST,
+  removeImageRequestAction,
   uploadImagesRequestAction,
 } from "@/reducers/post";
 import useInput from "@/hooks/useInput";
@@ -16,9 +17,20 @@ const PostForm = () => {
 
   const onSubmit = useCallback(
     (e) => {
-      dispatch(addPostRequestAction(text));
+      if (!text || !text.trim()) {
+        return alert("게시글을 작성해주세요.");
+      }
+      const formData = new FormData();
+      imagePaths.forEach((p) => {
+        formData.append("image", p);
+      });
+      formData.append("content", text);
+      return dispatch({
+        type: ADD_POST_REQUEST,
+        data: formData,
+      });
     },
-    [text]
+    [text, imagePaths]
   );
 
   // 포스팅이 완료되면 기존 입력창의 텍스트를 초기화하는 side Effect가 실행되도록 useEffect를 사용
@@ -40,6 +52,10 @@ const PostForm = () => {
       imageFormData.append("image", f);
     });
     dispatch(uploadImagesRequestAction(imageFormData));
+  });
+
+  const onRemoveImage = useCallback((index) => () => {
+    dispatch(removeImageRequestAction(index));
   });
 
   return (
@@ -74,13 +90,26 @@ const PostForm = () => {
         </Button>
       </div>
       <div>
-        {imagePaths.map((v) => {
+        {imagePaths.map((v, i) => {
           return (
             <div key={v} style={{ display: "inline-block" }}>
-              <img src={v} style={{ width: "200px" }} alt={v} />
-              <div>
-                <Button>DELETE</Button>
+              <div style={{ position: "absolute", padding: "32px 0 0 8px" }}>
+                {/* map() 안에 데이터를 넣고 싶다면, 콜백함수를 쓰고 싶다면 고차함수를 이용한다. */}
+                <Button size="small" onClick={onRemoveImage(i)}>
+                  제거
+                </Button>
               </div>
+              <img
+                src={`http://localhost:3065/${v}`}
+                style={{
+                  width: "200px",
+                  borderRadius: "8px",
+                  border: "0.5px solid lightgray",
+                  marginTop: "24px",
+                  marginRight: "8px",
+                }}
+                alt={v}
+              />
             </div>
           );
         })}
