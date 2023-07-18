@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+
 const { Post, Comment, Image, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
@@ -69,7 +70,7 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
       }
     }
     const fullPost = await Post.findOne({
-      where: { id: parseInt(post.id) },
+      where: { id: post.id },
       include: [
         { model: Image },
         {

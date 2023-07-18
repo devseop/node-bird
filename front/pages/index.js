@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import Head from "next/head";
 import AppLayout from "@/components/AppLayout";
 import PostForm from "@/components/PostForm";
@@ -48,6 +48,7 @@ const Home = () => {
     };
   }, [hasMorePosts, loadPostsLoading]);
 
+  // console.log("mainPosts", mainPosts);
   return (
     <>
       <Head>
@@ -55,9 +56,9 @@ const Home = () => {
       </Head>
       <AppLayout>
         {myInfo && <PostForm />}
-        {mainPosts.map((post) => {
-          return <PostCard key={post.id} post={post} />;
-        })}
+        {mainPosts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </AppLayout>
     </>
   );

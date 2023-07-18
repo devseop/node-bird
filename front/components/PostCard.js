@@ -22,8 +22,10 @@ import {
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
-  const [commentFormOpened, setcommentFormOpened] = useState(false);
   const { removePostLoading } = useSelector((state) => state.post);
+  const [commentFormOpened, setcommentFormOpened] = useState(false);
+  const id = useSelector((state) => state.user.myInfo?.id);
+  const liked = post.Likers.find((v) => v.id === id);
 
   const onLike = useCallback(() => {
     dispatch({
@@ -49,9 +51,6 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
-
-  const id = useSelector((state) => state.user.myInfo?.id);
-  const liked = post.Likers.find((v) => v.id === id);
 
   return (
     <CardWrapper>

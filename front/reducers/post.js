@@ -90,10 +90,10 @@ export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
 
 export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
-export const addPostRequestAction = (data) => ({
-  type: ADD_POST_REQUEST,
-  data,
-});
+// export const addPostRequestAction = (data) => ({
+//   type: ADD_POST_REQUEST,
+//   data,
+// });
 
 export const addCommentRequestAction = (data) => ({
   type: ADD_COMMENT_REQUEST,
@@ -192,8 +192,9 @@ const reducer = (state = initialState, action) =>
       case LOAD_POSTS_SUCCESS:
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
-        draft.mainPosts = action.data.concat(draft.mainPosts);
-        draft.hasMorePosts = draft.mainPosts.length = 10;
+        // draft.mainPosts = action.data.concat(draft.mainPosts);
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePosts = draft.mainPosts.length === 10;
         break;
       case LOAD_POSTS_FAILURE:
         draft.loadPostsLoading = false;

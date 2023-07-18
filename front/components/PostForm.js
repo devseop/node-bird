@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useEffect } from "react";
 import { Button, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   ADD_POST_REQUEST,
   removeImageRequestAction,
@@ -15,24 +16,6 @@ const PostForm = () => {
   );
   const [text, onChangeText, setText] = useInput("");
 
-  const onSubmit = useCallback(
-    (e) => {
-      if (!text || !text.trim()) {
-        return alert("게시글을 작성해주세요.");
-      }
-      const formData = new FormData();
-      imagePaths.forEach((p) => {
-        formData.append("image", p);
-      });
-      formData.append("content", text);
-      return dispatch({
-        type: ADD_POST_REQUEST,
-        data: formData,
-      });
-    },
-    [text, imagePaths]
-  );
-
   // 포스팅이 완료되면 기존 입력창의 텍스트를 초기화하는 side Effect가 실행되도록 useEffect를 사용
   useEffect(() => {
     if (addPostDone) {
@@ -40,19 +23,34 @@ const PostForm = () => {
     }
   }, [addPostDone]);
 
+  const onSubmit = useCallback(() => {
+    if (!text || !text.trim()) {
+      return alert("게시글을 작성하세요.");
+    }
+    const formData = new FormData();
+    imagePaths.forEach((p) => {
+      formData.append("image", p);
+    });
+    formData.append("content", text);
+    return dispatch({
+      type: ADD_POST_REQUEST,
+      data: formData,
+    });
+  }, [text, imagePaths]);
+
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
 
   const onChangeImages = useCallback((e) => {
-    console.log("images", e.target.files);
+    // console.log("images", e.target.files);
     const imageFormData = new FormData();
     [].forEach.call(e.target.files, (f) => {
       imageFormData.append("image", f);
     });
     dispatch(uploadImagesRequestAction(imageFormData));
-  });
+  }, []);
 
   const onRemoveImage = useCallback((index) => () => {
     dispatch(removeImageRequestAction(index));
