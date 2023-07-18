@@ -22,8 +22,31 @@ import {
   UPLOAD_IMAGES_REQUEST,
   UPLOAD_IMAGES_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
+  RETWEET_FAILURE,
 } from "@/reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "@/reducers/user";
+
+// retweet
+function retweetAPI(data) {
+  return axios.post(`/post/${data}/retweet`);
+}
+
+function* retweetSaga(action) {
+  try {
+    const result = yield call(retweetAPI, action.data);
+    yield put({
+      type: RETWEET_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: RETWEET_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 // upload images
 function uploadImagesAPI(data) {
@@ -179,6 +202,10 @@ function* addCommentSaga(action) {
 // => 서버에서는 데이터가 두 번 저장될 수 있기 때문에 검사를 해줘야한다.
 // throttle은 설정한 시간(ms) 내에서만 한 번 실행되도록 한다.
 
+function* watchRetweet() {
+  yield takeLatest(RETWEET_REQUEST, retweetSaga);
+}
+
 function* watchUploadImages() {
   yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImagesSaga);
 }
@@ -209,6 +236,7 @@ function* watchAddComment() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchRetweet),
     fork(watchUploadImages),
     fork(watchAddPost),
     fork(watchLoadPosts),

@@ -105,6 +105,69 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
   res.json(req.files.map((v) => v.filename));
 });
 
+// retweet
+router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+      include: [{ model: Post, as: "Retweet" }],
+    });
+    if (!post) {
+      return res.status(403).send("존재하지 않는 게시글입니다.");
+    }
+    // 아래 해당되는 조건들은 리트윗 불가능
+    if (
+      // 내 게시물 리트윗 하는 것
+      req.user.id === post.UserId ||
+      // 다른 사람이 리트윗한 '내 게시물'을 다시 리트윗 하는 것
+      (post.Retweet && post.Retweet.UserId === req.user.id)
+    ) {
+      return res.status(403).send("내 게시물은 직접 리트윗할 수 없습니다.");
+    }
+    // 다른 사람이 리트윗한 제3자의 게시물을 내가 리트윗 하는 것은 가능
+    const retweetTargetId = post.RetweetId || post.id;
+    const exPost = await Post.findOne({
+      where: {
+        UserId: req.user.id,
+        RetweetId: retweetTargetId,
+      },
+    });
+    if (exPost) {
+      return res.status(403).send("이미 리트윗된 게시물입니다.");
+    }
+    const retweet = await Post.create({
+      UserId: req.user.id,
+      RetweetId: retweetTargetId,
+      content: "retweet",
+    });
+    // 내가 어떤 게시물을 리트윗했는지 알려주는 코드
+    const retweetWithPrevPost = await Post.findOne({
+      where: { id: retweet.id },
+      include: [
+        {
+          model: Post,
+          as: "Retweet",
+          include: [
+            { model: User, attributes: ["id", "nickname"] },
+            { model: Image },
+          ],
+        },
+        { model: User, attributes: ["id", "nickname"] },
+        { model: Image },
+        {
+          model: Comment,
+          include: [{ model: User, attributes: ["id", "nickname"] }],
+        },
+        { model: User, as: "Likers", attributes: ["id"] },
+      ],
+    });
+    res.status(201).json(retweetWithPrevPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // add comment
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   try {
