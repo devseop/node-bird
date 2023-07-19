@@ -8,6 +8,7 @@ const router = express.Router();
 
 // 새로고침시 사용자 정보를 복구하는 코드
 router.get("/", async (req, res, next) => {
+  console.log(req.headers);
   try {
     // 사용자가 있으면 정보를 보내고 없으면 아무것도 보내지 않기
     if (req.user) {
