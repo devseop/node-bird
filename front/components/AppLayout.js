@@ -12,30 +12,38 @@ const AppLayout = ({ children }) => {
 
   const { myInfo } = useSelector((state) => state.user);
 
+  const MenuItems = [
+    {
+      label: <Link href="/">Node-Bird</Link>,
+      key: "home",
+    },
+    {
+      label: <Link href="/profile">Profile</Link>,
+      key: "profile",
+    },
+    {
+      label: (
+        <SearchBar
+          placeholder="Input Search Text"
+          size="large"
+          allowClear
+          enterButton
+          /* 검색어를 콘솔에 표시 */
+          onSearch={(value) => console.log(value)}
+          style={{ verticalAlign: "middle" }}
+        />
+      ),
+      key: "search",
+    },
+    {
+      label: <Link href="/signup">Sign Up</Link>,
+      key: "signUp",
+    },
+  ];
+
   return (
     <>
-      <MenuBar mode="horizontal">
-        <Menu.Item>
-          <Link href="/">Node-Bird</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/profile">Profile</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <SearchBar
-            placeholder="Input Search Text"
-            size="large"
-            allowClear
-            enterButton
-            /* 검색어를 콘솔에 표시 */
-            onSearch={(value) => console.log(value)}
-            style={{ verticalAlign: "middle" }}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/signup">Sign Up</Link>
-        </Menu.Item>
-      </MenuBar>
+      <MenuBar mode="horizontal" items={MenuItems} />
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {myInfo ? <UserProfile /> : <LoginForm />}

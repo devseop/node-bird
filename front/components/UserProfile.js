@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Button, Card } from "antd";
-import styled from "styled-components";
 import { logOutRequestAction } from "@/reducers/user";
 
 const UserProfile = () => {
@@ -35,16 +34,15 @@ const UserProfile = () => {
         title={myInfo.nickname}
         avatar={<Avatar>{myInfo.nickname[0]}</Avatar>}
       />
-      <LogoutButton onClick={onLogout} loading={logOutLoading}>
+      <Button
+        style={{ width: "100%", marginTop: "24px" }}
+        onClick={onLogout}
+        loading={logOutLoading}
+      >
         로그아웃
-      </LogoutButton>
+      </Button>
     </Card>
   );
 };
-
-const LogoutButton = styled(Button)`
-  margin-top: 24px;
-  width: 100%;
-`;
 
 export default UserProfile;
