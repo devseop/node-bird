@@ -25,6 +25,9 @@ import {
   RETWEET_REQUEST,
   RETWEET_SUCCESS,
   RETWEET_FAILURE,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
+  LOAD_POST_FAILURE,
 } from "@/reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "@/reducers/user";
 
@@ -83,6 +86,26 @@ function* loadPostsSaga(action) {
   } catch (err) {
     yield put({
       type: LOAD_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// load post
+function loadPostAPI(data) {
+  return axios.get(`/post/${data}`);
+}
+
+function* loadPostSaga(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POST_FAILURE,
       error: err.response.data,
     });
   }
@@ -214,6 +237,10 @@ function* watchLoadPosts() {
   yield takeLatest(LOAD_POSTS_REQUEST, loadPostsSaga);
 }
 
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPostSaga);
+}
+
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
 }
@@ -240,6 +267,7 @@ export default function* postSaga() {
     fork(watchUploadImages),
     fork(watchAddPost),
     fork(watchLoadPosts),
+    fork(watchLoadPost),
     fork(watchRemovePost),
     fork(watchLikePost),
     fork(watchUnlikePost),
