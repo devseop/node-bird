@@ -8,7 +8,6 @@ const router = express.Router();
 
 // 새로고침시 사용자 정보를 복구하는 코드
 router.get("/", async (req, res, next) => {
-  console.log(req.headers);
   try {
     // 사용자가 있으면 정보를 보내고 없으면 아무것도 보내지 않기
     if (req.user) {
@@ -35,6 +34,47 @@ router.get("/", async (req, res, next) => {
       res.status(200).json(fullUserWithoutPassword);
     } else {
       res.status(200).json(null);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// 다른 사용자 정보 가져오기
+router.get("/:userId", async (req, res, next) => {
+  try {
+    const fullUserWithoutPassword = await User.findOne({
+      where: { id: req.params.userId },
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: Post,
+          attributes: ["id"],
+        },
+        {
+          model: User,
+          as: "Followings",
+          attributes: ["id"],
+        },
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id"],
+        },
+      ],
+    });
+    if (fullUserWithoutPassword) {
+      // 시퀄라이즈에서 받은 데이터를 JSON으로 변환
+      const data = fullUserWithoutPassword.toJSON();
+      // 이후 받은 정보를 모두 length로 변환 => 개인정보 침해를 예방
+      data.Posts = data.Posts.length;
+      data.Followers = data.Followers.length;
+      data.Followings = data.Followings.length;
+      // 마지막으로 변환된 데이터를 전송
+      res.status(200).json(data);
+    } else {
+      res.status(404).json("존재하지 않는 사용자입니다.");
     }
   } catch (error) {
     console.error(error);
