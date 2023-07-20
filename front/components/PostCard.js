@@ -1,5 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+
 import { Card, Popover, Button, Avatar, List } from "antd";
 import {
   EllipsisOutlined,
@@ -8,12 +11,10 @@ import {
   RetweetOutlined,
   HeartFilled,
 } from "@ant-design/icons";
-import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 import FollowButton from "./FollowButton";
-import styled from "styled-components";
 import {
   REMOVE_POST_REQUEST,
   LIKE_POST_REQUEST,

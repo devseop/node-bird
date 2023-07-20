@@ -1,16 +1,22 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useCallback } from "react";
+import { useSelector } from "react-redux";
+import Router from "next/router";
 import Link from "next/link";
+import PropTypes from "prop-types";
+
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import { Input, Menu, Row, Col } from "antd";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import useInput from "@/hooks/useInput";
 
 const AppLayout = ({ children }) => {
-  // const [isLoggedin, setIsLoggedIn] = useState(false);
-
+  const [searchInput, onChangeSearchInput] = useInput("");
   const { myInfo } = useSelector((state) => state.user);
+
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
 
   const MenuItems = [
     {
@@ -25,12 +31,11 @@ const AppLayout = ({ children }) => {
       label: (
         <SearchBar
           placeholder="Input Search Text"
-          size="large"
           allowClear
           enterButton
-          /* 검색어를 콘솔에 표시 */
-          onSearch={(value) => console.log(value)}
-          style={{ verticalAlign: "middle" }}
+          value={searchInput}
+          onChange={onChangeSearchInput}
+          onSearch={onSearch}
         />
       ),
       key: "search",
