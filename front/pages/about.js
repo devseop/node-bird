@@ -53,13 +53,15 @@ const About = () => {
 //* 그럴 땐 getServerSideProps를 사용하는 것이 맞겠다
 //* getStaticProps는 SSG 방식이 유리한 블로그나 소개 사이트 등이 맞을 것 같다
 
-export const getStaticProps = wrapper.getStaticProps(async (context) => {
-  context.store.dispatch({
-    type: LOAD_USER_INFO_REQUEST,
-    data: 1,
-  });
-  context.store.dispatch(END);
-  await context.store.sagaTask.toPromise();
-});
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    context.store.dispatch({
+      type: LOAD_USER_INFO_REQUEST,
+      data: 1,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default About;

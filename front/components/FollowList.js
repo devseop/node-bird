@@ -32,7 +32,6 @@ const FollowList = ({ header, data, onClickMore, loading }) => {
       }
       bordered
       dataSource={data}
-      locale={`팔로잉 또는 팔로우 중인 사용자가 없습니다.`}
       renderItem={(item) => (
         <List.Item style={{ marginTop: "16px", padding: "0 8px" }}>
           <Card

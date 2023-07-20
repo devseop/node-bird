@@ -1,6 +1,6 @@
 {
-  "parser": "babel-eslint",
-  "psrserOptions": {
+  "parser": "@bable/eslint-parser",
+  "parserOptions": {
     "ecmaVersion": 2020,
     "sourceType": "module",
     "ecmaFeatures": {
@@ -12,7 +12,6 @@
     "node": true,
     "es6": true
   },
-  "extends": ["airbnb", "next/babel", "next/core-web-vitals"],
+  "extends": ["next/babel", "next/core-web-vitals", "airbnb"],
   "plugins": ["import", "react-hooks"]
-  // "extends": ["next/babel", "next/core-web-vitals"]
 }
