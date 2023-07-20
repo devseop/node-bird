@@ -7,7 +7,7 @@ import {
 import { Button, Card, List } from "antd";
 import { StopOutlined } from "@ant-design/icons";
 
-const FollowList = ({ header, data }) => {
+const FollowList = ({ header, data, onClickMore, loading }) => {
   const dispatch = useDispatch();
 
   const onCancel = (id) => () => {
@@ -25,11 +25,14 @@ const FollowList = ({ header, data }) => {
       header={<span>{header}</span>}
       loadMore={
         <div style={{ textAlign: "center", margin: "16px 0" }}>
-          <Button>more</Button>
+          <Button onClick={onClickMore} loading={loading}>
+            More
+          </Button>
         </div>
       }
       bordered
       dataSource={data}
+      locale={`팔로잉 또는 팔로우 중인 사용자가 없습니다.`}
       renderItem={(item) => (
         <List.Item style={{ marginTop: "16px", padding: "0 8px" }}>
           <Card
@@ -46,6 +49,8 @@ const FollowList = ({ header, data }) => {
 FollowList.propTypes = {
   header: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
+  onClickMore: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default FollowList;
