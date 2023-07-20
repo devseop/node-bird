@@ -26,8 +26,10 @@ const FollowButton = ({ post }) => {
 
   return (
     <Button
+      size="small"
       loading={isClickedBtn && (followLoading || unfollowLoading)}
       onClick={onClickButton}
+      style={{ fontSize: "12px", color: "rgba(0, 0, 0, 0.4)" }}
     >
       {isFollowing ? "언팔로우" : "팔로우"}
     </Button>

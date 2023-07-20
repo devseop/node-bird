@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 import { Card, Popover, Button, Avatar, List } from "antd";
 import {
@@ -21,6 +23,9 @@ import {
   UNLIKE_POST_REQUEST,
   retweetRequestAction,
 } from "@/reducers/post";
+
+dayjs.locale("ko");
+dayjs.extend(relativeTime);
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -67,10 +72,6 @@ const PostCard = ({ post }) => {
     if (!id) {
       return alert("로그인이 필요합니다.");
     }
-    // return dispatch({
-    //   type: RETWEET_REQUEST,
-    //   data: post.id,
-    // });
     return dispatch(retweetRequestAction(post.id));
   }, [id]);
 
@@ -78,9 +79,14 @@ const PostCard = ({ post }) => {
     <CardWrapper>
       <Card
         title={
-          post.RetweetId
-            ? `${post.User.nickname}님이 리트윗했습니다.`
-            : post.User.nickname
+          post.RetweetId ? (
+            `${post.User.nickname}님이 리트윗했습니다.`
+          ) : (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ marginRight: "8px" }}>{post.User.nickname}</div>
+              {id && <FollowButton post={post} />}
+            </div>
+          )
         }
         cover={post.Images[0]?.src ? <PostImages images={post.Images} /> : null}
         actions={[
@@ -120,13 +126,43 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        extra={id && <FollowButton post={post} />}
+        extra={
+          <span
+            style={{
+              color: "lightgray",
+              fontWeight: "400",
+              fontSize: "13px",
+            }}
+          >
+            {/* {dayjs(post.createdAt).format("YYYY.MM.DD")} */}
+            {dayjs(post.createdAt).fromNow()}
+          </span>
+        }
       >
         {post.RetweetId && post.Retweet ? (
           <Card
             size="small"
             type="inner"
-            title={post.Retweet.User.nickname}
+            title={
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>{post.Retweet.User.nickname}</span>
+                <span
+                  style={{
+                    color: "lightgray",
+                    fontWeight: "400",
+                    fontSize: "13px",
+                  }}
+                >
+                  {dayjs(post.createdAt).fromNow()}
+                </span>
+              </div>
+            }
             cover={
               post.Retweet.Images[0]?.src ? (
                 <PostImages images={post.Retweet.Images} />
