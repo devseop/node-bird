@@ -26,7 +26,7 @@ const UserProfile = () => {
       <Card style={{ border: "none" }}>
         <Card.Meta
           title={myInfo.nickname}
-          avatar={<Avatar size={56}>{myInfo.nickname[0]}</Avatar>}
+          avatar={<Avatar>{myInfo.nickname[0]}</Avatar>}
           description={
             <div style={{ display: "flex", gap: "8px" }}>
               <p key="twit">{myInfo.Posts.length} 트윗</p>

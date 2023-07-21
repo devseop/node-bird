@@ -52,7 +52,7 @@ const AppLayout = ({ children }) => {
         </Styled.GNB>
       ) : null}
       <Styled.ContentLayout>
-        <UserProfile />
+        {myInfo ? <UserProfile /> : <LoginForm />}
         {children}
       </Styled.ContentLayout>
       <Styled.FooterWrapper>
