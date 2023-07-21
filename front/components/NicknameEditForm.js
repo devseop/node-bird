@@ -3,7 +3,7 @@ import { CHANGE_NICKNAME_REQUEST } from "@/reducers/user";
 import { Form, Input } from "antd";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 const NicknameEditForm = () => {
   const { myInfo } = useSelector((state) => state.user);

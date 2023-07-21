@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 

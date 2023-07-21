@@ -6,9 +6,11 @@ import PropTypes from "prop-types";
 
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
-import { Input, Menu, Row, Col } from "antd";
-import styled from "styled-components";
+import { Input, Menu, Row, Col, Layout } from "antd";
+import styled from "@emotion/styled";
 import useInput from "@/hooks/useInput";
+
+const { Header, Content, Footer } = Layout;
 
 const AppLayout = ({ children }) => {
   const [searchInput, onChangeSearchInput] = useInput("");
@@ -27,9 +29,15 @@ const AppLayout = ({ children }) => {
       label: <Link href="/profile">Profile</Link>,
       key: "profile",
     },
+
+    {
+      label: <Link href="/signup">Sign Up</Link>,
+
+      key: "signUp",
+    },
     {
       label: (
-        <SearchBar
+        <Styled.SearchBar
           placeholder="Input Search Text"
           allowClear
           enterButton
@@ -40,15 +48,13 @@ const AppLayout = ({ children }) => {
       ),
       key: "search",
     },
-    {
-      label: <Link href="/signup">Sign Up</Link>,
-      key: "signUp",
-    },
   ];
 
   return (
-    <>
-      <MenuBar mode="horizontal" items={MenuItems} />
+    <Layout style={{ backgroundColor: "white" }}>
+      <Styled.GNB>
+        <Menu mode="horizontal" items={MenuItems} style={{ height: "56px" }} />
+      </Styled.GNB>
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {myInfo ? <UserProfile /> : <LoginForm />}
@@ -57,28 +63,31 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6}>
+          <span>Made by </span>
           <a
             href="https://devseop.github.io/"
             /* target="_blank" 이용 시에는 꼭 rel="norefferrer noopener"를 설정할 것 */
             target="_blank"
             rel="norefferrer noopener"
           >
-            Made by Devseop
+            Devseop
           </a>
         </Col>
       </Row>
-    </>
+    </Layout>
   );
 };
 
-const MenuBar = styled(Menu)`
-  margin-bottom: 32px;
-  padding: 0 0 12px 0;
+const GNB = styled(Header)`
+  background-color: #fff;
+  height: 56px;
 `;
 
 const SearchBar = styled(Input.Search)`
   vertical-align: middle;
 `;
+
+const Styled = { GNB, SearchBar };
 
 AppLayout.propTypes = {
   children: PropTypes.node.isRequired,

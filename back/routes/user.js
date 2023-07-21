@@ -223,16 +223,6 @@ router.post(
   }
 );
 
-// log out
-router.post("/logOut", isLoggedIn, (req, res) => {
-  console.log(req.user);
-  req.logOut(() => {
-    // res.redirect("/");
-  });
-  // req.session.destroy();
-  res.send("✅ Log Out Successed");
-});
-
 // sign up
 router.post("/", isNotLoggedIn, async (req, res, next) => {
   try {
@@ -263,6 +253,16 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
     console.error(error);
     next(error); // status 500
   }
+});
+
+// log out
+router.post("/logOut", isLoggedIn, (req, res) => {
+  console.log(req.user);
+  req.logOut(() => {
+    // res.redirect("/");
+  });
+  // req.session.destroy();
+  res.send("✅ Log Out Successed");
 });
 
 // edit nickname

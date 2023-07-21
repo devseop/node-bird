@@ -5,11 +5,11 @@ import Router from "next/router";
 import Head from "next/head";
 import { END } from "redux-saga";
 
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { Form, Input, Checkbox, Button } from "antd";
 import AppLayout from "@/components/AppLayout";
 import useInput from "@/hooks/useInput";
-import { SIGN_UP_REQUEST } from "@/reducers/user";
+import { SIGN_UP_REQUEST, LOAD_MY_INFO_REQUEST } from "@/reducers/user";
 import wrapper from "@/store/configureStore";
 
 const ErrorMessage = styled.div`
@@ -25,7 +25,7 @@ const SignUp = () => {
 
   // 회원가입 화면에서 로그인시 메인 화면으로 이동
   useEffect(() => {
-    if (!(myInfo && myInfo.id)) {
+    if (myInfo && myInfo.id) {
       Router.replace("/");
     }
   }, [myInfo && myInfo.id]);
