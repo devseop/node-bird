@@ -9,6 +9,7 @@ import { LOAD_MY_INFO_REQUEST } from "@/reducers/user";
 import wrapper from "@/store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
+import Router from "next/router";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -47,17 +48,18 @@ const Home = () => {
     };
   }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
-  // console.log("mainPosts", mainPosts);
   return (
     <>
       <Head>
-        <title>Home | NodeBird</title>
+        <title>
+          {myInfo ? `${myInfo.nickname}님의 Node-Bird` : "Node-Bird"}
+        </title>
       </Head>
       <AppLayout>
         {myInfo && <PostForm />}
-        {mainPosts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+        {myInfo && mainPosts
+          ? mainPosts.map((post) => <PostCard key={post.id} post={post} />)
+          : null}
       </AppLayout>
     </>
   );

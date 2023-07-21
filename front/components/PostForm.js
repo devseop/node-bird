@@ -8,6 +8,7 @@ import {
   uploadImagesRequestAction,
 } from "@/reducers/post";
 import useInput from "@/hooks/useInput";
+import { PictureFilled, PictureOutlined } from "@ant-design/icons";
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,11 @@ const PostForm = () => {
 
   return (
     <Form
-      style={{ margin: "12px 0 24px" }}
+      style={{
+        margin: "0 0 44px",
+        borderTop: "1px solid lightgray",
+        // borderBottom: "1px solid lightgray",
+      }}
       encType="multipart/form-data"
       onFinish={onSubmit}
     >
@@ -66,7 +71,10 @@ const PostForm = () => {
         value={text}
         onChange={onChangeText}
         maxLength={140}
-        placeholder="어떤 신기한 일이 있었나요?"
+        placeholder="오늘은 어떤 일이 있었나요?"
+        autoSize={{ minRows: 3, maxRows: 8 }}
+        bordered={false}
+        style={{ fontSize: "16px", padding: "16px 0 12px" }}
       />
       <div>
         <input
@@ -76,17 +84,21 @@ const PostForm = () => {
           ref={imageInput}
           onChange={onChangeImages}
         />
-        <Button onClick={onClickImageUpload}>이미지 추가하기</Button>
+        <Button size="large" shape="circle" onClick={onClickImageUpload}>
+          <PictureOutlined />
+        </Button>
         {/* 게시글 작성버튼 */}
         <Button
           type="primary"
           style={{ float: "right" }}
           htmlType="submit"
           loading={addPostLoading}
+          size="large"
         >
-          Tweet
+          게시
         </Button>
       </div>
+      {/* 이미지 미리보기 */}
       <div>
         {imagePaths.map((v, i) => {
           return (

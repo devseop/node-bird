@@ -1,4 +1,5 @@
-import styled, { createGlobalStyle } from "@emotion/styled";
+import styled from "@emotion/styled";
+import { createGlobalStyle } from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
 
 export const Global = createGlobalStyle`

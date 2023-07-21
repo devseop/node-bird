@@ -22,72 +22,105 @@ const AppLayout = ({ children }) => {
 
   const MenuItems = [
     {
-      label: <Link href="/">Node-Bird</Link>,
+      label: (
+        <Link href="/">
+          <ICNodeBird>( ˙◊˙ )</ICNodeBird>
+        </Link>
+      ),
       key: "home",
     },
-    {
-      label: <Link href="/profile">Profile</Link>,
-      key: "profile",
-    },
-
-    {
-      label: <Link href="/signup">Sign Up</Link>,
-
-      key: "signUp",
-    },
-    {
-      label: (
-        <Styled.SearchBar
-          placeholder="Input Search Text"
-          allowClear
-          enterButton
-          value={searchInput}
-          onChange={onChangeSearchInput}
-          onSearch={onSearch}
-        />
-      ),
-      key: "search",
-    },
+    // {
+    //   label: (
+    //     <Styled.SearchBar
+    //       placeholder="Input Search Text"
+    //       allowClear
+    //       enterButton
+    //       value={searchInput}
+    //       onChange={onChangeSearchInput}
+    //       onSearch={onSearch}
+    //     />
+    //   ),
+    //   key: "search",
+    // },
   ];
 
   return (
     <Layout style={{ backgroundColor: "white" }}>
-      <Styled.GNB>
-        <Menu mode="horizontal" items={MenuItems} style={{ height: "56px" }} />
-      </Styled.GNB>
-      <Row gutter={8}>
-        <Col xs={24} md={6}>
-          {myInfo ? <UserProfile /> : <LoginForm />}
-        </Col>
-        <Col xs={24} md={12}>
-          {children}
-        </Col>
-        <Col xs={24} md={6}>
-          <span>Made by </span>
-          <a
-            href="https://devseop.github.io/"
-            /* target="_blank" 이용 시에는 꼭 rel="norefferrer noopener"를 설정할 것 */
-            target="_blank"
-            rel="norefferrer noopener"
-          >
-            Devseop
-          </a>
-        </Col>
-      </Row>
+      {myInfo ? (
+        <Styled.GNB>
+          <Styled.MenuBar mode="horizontal" items={MenuItems} />
+        </Styled.GNB>
+      ) : null}
+      <Styled.ContentLayout>
+        <UserProfile />
+        {children}
+      </Styled.ContentLayout>
+      <Styled.FooterWrapper>
+        <span>Made by </span>
+        <a
+          href="https://devseop.github.io/"
+          /* target="_blank" 이용 시에는 꼭 rel="norefferrer noopener"를 설정할 것 */
+          target="_blank"
+          rel="norefferrer noopener"
+        >
+          Devseop
+        </a>
+      </Styled.FooterWrapper>
     </Layout>
   );
 };
 
 const GNB = styled(Header)`
+  padding: 0;
   background-color: #fff;
-  height: 56px;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+`;
+
+const MenuBar = styled(Menu)`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  /* border: none; */
+`;
+
+const ICNodeBird = styled.span`
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -1px;
+`;
+
+const ContentLayout = styled(Content)`
+  width: 560px;
+  min-width: 336px;
+  margin: 120px auto 0;
 `;
 
 const SearchBar = styled(Input.Search)`
   vertical-align: middle;
 `;
 
-const Styled = { GNB, SearchBar };
+const FooterWrapper = styled(Footer)`
+  text-align: center;
+  width: 560px;
+  margin: 0 auto;
+  background-color: transparent;
+
+  span {
+    color: lightslategray;
+  }
+`;
+
+const Styled = {
+  GNB,
+  MenuBar,
+  ICNodeBird,
+  ContentLayout,
+  SearchBar,
+  FooterWrapper,
+};
 
 AppLayout.propTypes = {
   children: PropTypes.node.isRequired,

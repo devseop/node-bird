@@ -32,7 +32,6 @@ const LoginForm = () => {
 
   const onSubmitForm = useCallback(
     (e) => {
-      // console.log(email, password);
       dispatch(logInRequestAction({ email, password }));
     },
     [email, password]
@@ -40,6 +39,10 @@ const LoginForm = () => {
 
   return (
     <Styled.FormWrapper onFinish={onSubmitForm}>
+      <Styled.LoginTitle>
+        <p>Hello 👋</p>
+        <p>Stranger!</p>
+      </Styled.LoginTitle>
       <Styled.InputWrapper>
         <label htmlFor="user-email">이메일</label>
         <Input
@@ -85,6 +88,17 @@ const FormWrapper = styled(Form)`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 360px;
+  margin: 88px auto 24px;
+`;
+
+const LoginTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 16px;
 `;
 
 const InputWrapper = styled.div`
@@ -112,6 +126,7 @@ const ActionButton = styled(Button)`
 
 const Styled = {
   FormWrapper,
+  LoginTitle,
   InputWrapper,
   ButtonWrapper,
   ActionButton,
