@@ -60,8 +60,18 @@ const SignUp = () => {
   const onChangeTerm = useCallback((e) => {
     setTerm(e.target.checked);
     setTermError(false);
-    console.log(term);
   });
+
+  const RegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+  const isValid = !(
+    email !== " " &&
+    nickname !== " " &&
+    password !== " " &&
+    RegEx.test(password) &&
+    password === passwordCheck &&
+    term === true
+  );
 
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
@@ -97,6 +107,7 @@ const SignUp = () => {
             onChange={onChangeEmail}
             type="email"
             size="large"
+            placeholder="실제 사용하는 이메일로 입력하지 마세요"
           />
         </Styled.InputWrapper>
         <div>
@@ -108,6 +119,7 @@ const SignUp = () => {
             onChange={onChangeNickname}
             type="text"
             size="large"
+            placeholder="원하는 닉네임을 입력해주세요"
           />
         </div>
         <div>
@@ -119,6 +131,7 @@ const SignUp = () => {
             onChange={onChangePassword}
             required
             size="large"
+            placeholder="실제 이용하는 비밀번호로 입력하지 마세요"
           />
         </div>
         <div>
@@ -130,40 +143,28 @@ const SignUp = () => {
             onChange={onChangePasswordCheck}
             required
             size="large"
+            placeholder="비밀번호를 한 번 더 입력해주세요"
           />
           {passwordError && (
             <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
           )}
         </div>
-        <div>
-          <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
-            (필수) 이용에 동의합니다.
-          </Checkbox>
-          {termError && (
-            <Styled.ErrorMessage>약관에 동의하셔야 합니다.</Styled.ErrorMessage>
-          )}
-        </div>
-        <div style={{ marginTop: "24px" }}>
+        <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
+          (필수) 이용에 동의합니다.
+        </Checkbox>
+        <Styled.ButtonWrapper>
           <Styled.ActionButton
             type="primary"
             htmlType="submit"
             loading={signUpLoading}
-            disabled={
-              email !== "" &&
-              nickname !== "" &&
-              password !== "" &&
-              password === passwordCheck &&
-              term === false
-                ? true
-                : false
-            }
+            disabled={isValid}
           >
             가입하기
           </Styled.ActionButton>
           <Styled.BackButton type="button" onClick={(e) => Router.push("/")}>
             돌아가기
           </Styled.BackButton>
-        </div>
+        </Styled.ButtonWrapper>
       </Styled.FormWrapper>
     </AppLayout>
   );
@@ -201,15 +202,21 @@ const InputWrapper = styled.div`
   }
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+`;
+
 const ActionButton = styled(Button)`
   font-size: 16px;
   font-weight: 600;
   height: 44px;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
 const BackButton = styled.button`
-  margin-left: 12px;
   padding: 4px 15px;
   border: 1px solid lightgray;
   border-radius: 6px;
@@ -226,6 +233,7 @@ const Styled = {
   ErrorMessage,
   FormWrapper,
   InputWrapper,
+  ButtonWrapper,
   ActionButton,
   BackButton,
   LoginTitle,
