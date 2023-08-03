@@ -14,11 +14,21 @@ const globalStyles = css`
 
   .ant-card-head {
     padding: 0 !important;
+    border: none !important;
   }
 
   .ant-card-body {
     padding: 0 !important;
     border-radius: 0;
+  }
+
+  .ant-card-actions {
+    border-top: none !important;
+  }
+
+  .ant-card-actions > li {
+    border: none !important;
+    width: 44px !important;
   }
 `;
 

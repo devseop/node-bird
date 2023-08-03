@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import ImagesZoom from "./ImagesZoom";
 import PropTypes from "prop-types";
+import styled from "@emotion/styled";
 
 const PostImages = ({ images }) => {
   const [showImagesZoom, setShowImagesZoom] = useState(false);
@@ -19,17 +20,12 @@ const PostImages = ({ images }) => {
     return (
       <>
         {/* 이미지를 클릭할 필요가 없다는 것을 알려주려면 role='presentation'을 추가한다. */}
-        <img
+        <Styled.ImageWrapper
           role="presentation"
           src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
-          style={{
-            borderRadius: 0,
-            // faker 사용시 해당 옵션때문에 사이즈가 어긋남
-            // width: "628px",
-            objectFit: "cover",
-          }}
+          imageLength={images.length}
         />
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
@@ -40,28 +36,20 @@ const PostImages = ({ images }) => {
     return (
       <>
         <div style={{ display: "flex" }}>
-          <img
+          <Styled.ImageWrapper
             role="presentation"
             src={`http://localhost:3065/${images[0].src}`}
             alt={images[0].src}
             onClick={onZoom}
-            style={{
-              borderRadius: 0,
-              width: "50%",
-              cursor: "pointer",
-            }}
+            imageLength={images.length}
           />
-          <img
+          <Styled.ImageWrapper
             role="presentation"
             width="50%"
             src={`http://localhost:3065/${images[1].src}`}
             alt={images[1].src}
             onClick={onZoom}
-            style={{
-              borderRadius: 0,
-              width: "50%",
-              cursor: "pointer",
-            }}
+            imageLength={images.length}
           />
         </div>
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
@@ -72,16 +60,13 @@ const PostImages = ({ images }) => {
   return (
     <>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img
+        <Styled.ImageWrapper
           role="presentation"
           width="50%"
           src={`http://localhost:3065/${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}
-          style={{
-            borderRadius: 0,
-            cursor: "pointer",
-          }}
+          imageLength={images.length}
         />
         <div
           style={{
@@ -111,5 +96,16 @@ PostImages.propTypes = {
     })
   ).isRequired,
 };
+
+const ImageWrapper = styled.img`
+  object-fit: cover;
+  width: ${(props) => (props.imageLength >= 2 ? "50%" : "560px")};
+  height: 200px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px !important;
+  cursor: pointer;
+`;
+
+const Styled = { ImageWrapper };
 
 export default PostImages;

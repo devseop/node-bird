@@ -45,7 +45,7 @@ const AppLayout = ({ children }) => {
   ];
 
   return (
-    <Layout style={{ backgroundColor: "white" }}>
+    <Layout style={{ backgroundColor: "transparent" }}>
       {myInfo ? (
         <Styled.GNB>
           <Styled.MenuBar mode="horizontal" items={MenuItems} />

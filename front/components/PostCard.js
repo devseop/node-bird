@@ -78,6 +78,7 @@ const PostCard = ({ post }) => {
   return (
     <CardWrapper>
       <Card
+        style={{ border: "none" }}
         title={
           post.RetweetId ? (
             `${post.User.nickname}님이 리트윗했습니다.`
@@ -101,6 +102,7 @@ const PostCard = ({ post }) => {
             <HeartOutlined key="heart" onClick={onLike} />
           ),
           <MessageOutlined key="commnet" onClick={onToggleComment} />,
+          // edit/delete Button
           <Popover
             key="more"
             content={
@@ -134,11 +136,11 @@ const PostCard = ({ post }) => {
               fontSize: "13px",
             }}
           >
-            {/* {dayjs(post.createdAt).format("YYYY.MM.DD")} */}
             {dayjs(post.createdAt).fromNow()}
           </span>
         }
       >
+        {/* Retweet Card Comp */}
         {post.RetweetId && post.Retweet ? (
           <Card
             size="small"
@@ -170,7 +172,6 @@ const PostCard = ({ post }) => {
             }
           >
             <Card.Meta
-              // avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
               // title={post.Retweet.User.nickname}
               description={<PostCardContent postData={post.Retweet.content} />}
             />
@@ -181,6 +182,7 @@ const PostCard = ({ post }) => {
           />
         )}
       </Card>
+      {/* Commnet Comp */}
       {commentFormOpened && (
         <CommentWrapper>
           <CommentForm post={post} />
@@ -205,7 +207,8 @@ const PostCard = ({ post }) => {
 };
 
 const CardWrapper = styled.div`
-  margin-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+  /* margin-bottom: 24px; */
 `;
 
 const CommentWrapper = styled.div`
