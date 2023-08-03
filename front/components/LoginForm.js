@@ -8,17 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { logInRequestAction } from "@/reducers/user";
 
 const LoginForm = () => {
-  // const [id, setId] = useState("");
-  // const [password, setPw] = useState("");
-
-  // const onChangeId = useCallback((e) => {
-  //   setId(e.target.value);
-  // }, []);
-
-  // const onChangePw = useCallback((e) => {
-  //   setPw(e.target.value);
-  // }, []);
-
   const dispatch = useDispatch();
   const { logInLoading, logInError } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput("");
