@@ -11,11 +11,7 @@ import AppLayout from "@/components/AppLayout";
 import useInput from "@/hooks/useInput";
 import { SIGN_UP_REQUEST, LOAD_MY_INFO_REQUEST } from "@/reducers/user";
 import wrapper from "@/store/configureStore";
-
-const ErrorMessage = styled.div`
-  color: red;
-  margin-top: 4px;
-`;
+import Link from "next/link";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -64,6 +60,7 @@ const SignUp = () => {
   const onChangeTerm = useCallback((e) => {
     setTerm(e.target.checked);
     setTermError(false);
+    console.log(term);
   });
 
   const onSubmit = useCallback(() => {
@@ -86,48 +83,53 @@ const SignUp = () => {
       <Head>
         <title>Sign Up | NodeBird</title>
       </Head>
-      <Form onFinish={onSubmit}>
-        <div>
+      <Styled.FormWrapper onFinish={onSubmit}>
+        <Styled.LoginTitle>
+          <p>🧑🏻‍💻</p>
+          <p>회원가입</p>
+        </Styled.LoginTitle>
+        <Styled.InputWrapper>
           <label htmlFor="user-email">이메일</label>
-          <br />
           <Input
             name="user-email"
             value={email}
             required
             onChange={onChangeEmail}
             type="email"
+            size="large"
           />
-        </div>
+        </Styled.InputWrapper>
         <div>
           <label htmlFor="user-nickname">닉네임</label>
-          <br />
           <Input
             name="user-nickname"
             value={nickname}
             required
             onChange={onChangeNickname}
+            type="text"
+            size="large"
           />
         </div>
         <div>
           <label htmlFor="user-password">비밀번호</label>
-          <br />
           <Input
             name="user-password"
             type="password"
             value={password}
             onChange={onChangePassword}
             required
+            size="large"
           />
         </div>
         <div>
           <label htmlFor="user-password-check">비밀번호 확인</label>
-          <br />
           <Input
             name="user-password-check"
             type="password"
             value={passwordCheck}
             onChange={onChangePasswordCheck}
             required
+            size="large"
           />
           {passwordError && (
             <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
@@ -137,16 +139,96 @@ const SignUp = () => {
           <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
             (필수) 이용에 동의합니다.
           </Checkbox>
-          {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
+          {termError && (
+            <Styled.ErrorMessage>약관에 동의하셔야 합니다.</Styled.ErrorMessage>
+          )}
         </div>
         <div style={{ marginTop: "24px" }}>
-          <Button type="primary" htmlType="submit" loading={signUpLoading}>
-            회원가입하기
-          </Button>
+          <Styled.ActionButton
+            type="primary"
+            htmlType="submit"
+            loading={signUpLoading}
+            disabled={
+              email !== "" &&
+              nickname !== "" &&
+              password !== "" &&
+              password === passwordCheck &&
+              term === false
+                ? true
+                : false
+            }
+          >
+            가입하기
+          </Styled.ActionButton>
+          <Styled.BackButton type="button" onClick={(e) => Router.push("/")}>
+            돌아가기
+          </Styled.BackButton>
         </div>
-      </Form>
+      </Styled.FormWrapper>
     </AppLayout>
   );
+};
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-top: 4px;
+`;
+
+const FormWrapper = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 360px;
+  margin: 88px auto 24px;
+`;
+
+const LoginTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 16px;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: 14px;
+  }
+`;
+
+const ActionButton = styled(Button)`
+  font-size: 16px;
+  font-weight: 600;
+  height: 44px;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+`;
+
+const BackButton = styled.button`
+  margin-left: 12px;
+  padding: 4px 15px;
+  border: 1px solid lightgray;
+  border-radius: 6px;
+  height: 44px;
+  background-color: transparent;
+  cursor: pointer;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: lightgray;
+`;
+
+const Styled = {
+  ErrorMessage,
+  FormWrapper,
+  InputWrapper,
+  ActionButton,
+  BackButton,
+  LoginTitle,
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(

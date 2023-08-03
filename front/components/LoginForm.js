@@ -40,7 +40,7 @@ const LoginForm = () => {
           onChange={onChangeEmail}
           required
           type="email"
-          style={{ padding: "8px 12px", height: "44px", borderRadius: "8px" }}
+          size="large"
         />
       </Styled.InputWrapper>
       <Styled.InputWrapper>

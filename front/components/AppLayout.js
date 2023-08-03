@@ -5,8 +5,7 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 
 import UserProfile from "./UserProfile";
-import LoginForm from "./LoginForm";
-import { Input, Menu, Row, Col, Layout } from "antd";
+import { Input, Menu, Layout } from "antd";
 import styled from "@emotion/styled";
 import useInput from "@/hooks/useInput";
 
@@ -52,7 +51,7 @@ const AppLayout = ({ children }) => {
         </Styled.GNB>
       ) : null}
       <Styled.ContentLayout>
-        {myInfo ? <UserProfile /> : <LoginForm />}
+        {myInfo && <UserProfile />}
         {children}
       </Styled.ContentLayout>
       <Styled.FooterWrapper>

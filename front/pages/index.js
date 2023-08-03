@@ -9,7 +9,8 @@ import { LOAD_MY_INFO_REQUEST } from "@/reducers/user";
 import wrapper from "@/store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
-import Router from "next/router";
+import LoginForm from "@/components/LoginForm";
+import UserProfile from "@/components/UserProfile";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const Home = () => {
         </title>
       </Head>
       <AppLayout>
+        {!myInfo && <LoginForm />}
         {myInfo && <PostForm />}
         {myInfo && mainPosts
           ? mainPosts.map((post) => <PostCard key={post.id} post={post} />)
